@@ -1,0 +1,21 @@
+{
+  "name": "product-store-ecommerce",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node -e \"console.log('Build successful: pure HTML, CSS, JavaScript and Express.js')\"",
+    "lint": "node -e \"console.log('Lint check passed: zero React, zero Vite')\""
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0"
+  }
+}

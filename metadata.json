@@ -1,0 +1,6 @@
+{
+  "name": "Smart Shopping Hub - Online Shopping",
+  "description": "Single-page responsive e-commerce web application with product catalogue, cart, and checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

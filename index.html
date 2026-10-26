@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Shopping Hub - Online Shopping</title>
+  <meta name="description" content="Single-page responsive e-commerce web application with product catalogue, cart, and checkout."><meta property="og:title" content="Smart Shopping Hub - Online Shopping"><meta property="og:description" content="Single-page responsive e-commerce web application with product catalogue, cart, and checkout.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header class="site-header">
+    <a href="#home" class="brand-link">🛍️ Smart Shopping Hub</a>
+    <form class="search-form" onsubmit="handleSearchSubmit(event)"><input type="text" id="searchInput" placeholder="Search for products, brands and more..." required><button type="submit">Search</button></form>
+    <nav class="nav-links">
+      <a href="#catalogue">Catalogue</a>
+      <a href="#details">Details</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <span id="userAccountSection"><a href="#login">Login</a></span>
+      <a href="#cart" class="cart-btn" onclick="renderCart(); byId('cart')?.scrollIntoView({behavior:'smooth'});">🛒 Cart <span id="cartBadge" class="badge">0</span></a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <!-- Hero Promotional Banner -->
+    <section id="home" class="hero-banner">
+      <span id="slideBadge" style="background:#ffe500; color:#1e293b; padding:4px 10px; border-radius:4px; font-weight:700; font-size:12px;">MEGA SALE</span>
+      <h1 id="slideTitle" style="margin-top:12px;">Big Savings on Top Electronics & Fashion</h1>
+      <p id="slideSubtitle">Get up to 60% discount with free express delivery on all orders.</p>
+      <a href="#catalogue" class="btn-hero">Explore All Products ➜</a>
+    </section>
+    <!-- Deals & Electronics Sections -->
+    <section><div class="section-title"><h2>🔥 Top Deals of the Day</h2><a href="#catalogue" style="font-size:14px; color:#2874f0; font-weight:600;">View All ➜</a></div><div id="homeDealsGrid" class="product-grid"></div></section>
+    <section><div class="section-title"><h2>⚡ Best in Electronics</h2><a href="#catalogue" style="font-size:14px; color:#2874f0; font-weight:600;">View All ➜</a></div><div id="homeElectronicsGrid" class="product-grid"></div></section>
+    <!-- Product Catalogue Section -->
+    <section id="catalogue">
+      <div class="section-title"><h1>All Products Catalogue</h1><span id="catalogueCountText" style="font-size:14px; color:#64748b; font-weight:500;"></span></div>
+      <div class="filter-bar">
+        <div class="cat-pills"><button class="cat-pill-btn active" onclick="setCatalogueCategory('all')">All Items</button><button class="cat-pill-btn" onclick="setCatalogueCategory('electronics')">Electronics</button><button class="cat-pill-btn" onclick="setCatalogueCategory('fashion')">Fashion</button><button class="cat-pill-btn" onclick="setCatalogueCategory('home')">Home</button><button class="cat-pill-btn" onclick="setCatalogueCategory('appliances')">Appliances</button><button class="cat-pill-btn" onclick="setCatalogueCategory('books')">Books</button></div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select onchange="handleSortSelectChange(this.value)" style="padding:6px 10px; border-radius:4px; border:1px solid #cbd5e1; font-size:13px;"><option value="popular">Sort: Popularity</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option></select>
+          <button onclick="resetAllFilters()" style="padding:6px 12px; background:#fff; border:1px solid #cbd5e1; border-radius:4px; font-size:13px; cursor:pointer;">Reset</button></div>
+      </div>
+      <div id="catalogueGrid" class="product-grid"></div>
+    </section>
+    <!-- Product Details Section -->
+    <section id="details"><div class="section-title"><h2>Product Details & Specifications</h2></div><div id="productDetailContainer"></div></section>
+    <!-- Shopping Cart Section -->
+    <section id="cart">
+      <div class="section-title"><h2>My Shopping Cart</h2></div>
+      <div id="cartEmptyState" style="display:none; text-align:center; padding:48px 16px; background:#fff; border-radius:8px;"><h2>Your cart is currently empty!</h2><p style="color:#64748b; margin:8px 0 16px;">Browse our collection and find something you love.</p><a href="#catalogue" class="btn-hero">Shop Now ➜</a></div>
+      <div id="cartMainLayout" class="cart-layout">
+        <div class="cart-box"><h3 style="margin-bottom:12px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">Items in Cart</h3><div id="cartItemsList"></div></div>
+        <div class="cart-box" style="height:fit-content;">
+          <h3 style="margin-bottom:12px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">Price Summary</h3>
+          <div class="summary-line"><span>Items (<span id="cartSummaryCount">0</span>)</span><span id="cartSummaryMrp">₹0</span></div>
+          <div class="summary-line"><span>Discount</span><span id="cartSummaryDiscount" style="color:#388e3c;">-₹0</span></div>
+          <div class="summary-line"><span>Delivery Charges</span><span id="cartSummaryDelivery" style="color:#388e3c;">FREE</span></div>
+          <hr style="margin:12px 0; border:0; border-top:1px solid #e2e8f0;">
+          <div class="summary-line" style="font-size:16px; font-weight:800;"><span>Total Amount</span><span id="cartSummaryFinal">₹0</span></div>
+          <button class="btn-checkout" onclick="openCheckoutModal()">PROCEED TO CHECKOUT</button>
+        </div>
+      </div>
+    </section>
+    <!-- About Section -->
+    <section id="about" class="form-card" style="max-width:100%; margin-bottom:24px;"><h2>About Smart Shopping Hub</h2><p style="color:#475569; margin:8px 0 12px;">Your one-stop destination for quality gadgets, trendy clothing, home essentials, and academic handbooks.</p><ul style="padding-left:20px; color:#475569;"><li>100% Genuine Certified Products with Brand Warranty.</li><li>Fast delivery across thousands of Indian PIN codes.</li><li>24/7 dedicated customer care and easy Cash on Delivery returns.</li></ul></section>
+    <!-- Contact Support & User Account Sections -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px; margin-bottom:24px;">
+      <section id="contact" class="form-card"><h2 style="font-size:20px; margin-bottom:8px;">Contact Support</h2><div id="contactSuccessAlert" style="display:none; padding:10px; background:#dcfce7; color:#15803d; border-radius:4px; margin-bottom:12px; font-weight:600; font-size:13px;"></div><form onsubmit="handleContactSubmit(event)"><div class="form-group"><label>Your Name</label><input type="text" id="contactNameInput" required placeholder="Full Name"></div><div class="form-group"><label>Email</label><input type="email" id="contactEmailInput" required placeholder="you@example.com"></div><div class="form-group"><label>Message</label><textarea id="contactMessageInput" rows="3" required placeholder="How can we help?"></textarea></div><button type="submit" class="btn-submit">Send Message</button></form></section>
+      <section id="login" class="form-card"><h2 style="font-size:20px; margin-bottom:8px;">Account Login & Registration</h2><form onsubmit="handleLoginSubmit(event)"><div class="form-group"><label>Email or Mobile</label><input type="text" id="loginEmailInput" required placeholder="Enter email or mobile"></div><div class="form-group"><label>Password</label><input type="password" id="loginPasswordInput" required placeholder="Enter password"></div><button type="submit" class="btn-submit">Login</button><button type="button" onclick="autoFillDemoLogin()" style="width:100%; margin-top:8px; padding:6px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:4px; font-size:13px; cursor:pointer;">Auto-fill Demo Credentials</button></form><hr style="margin:16px 0; border:0; border-top:1px solid #e2e8f0;"><form onsubmit="handleRegisterSubmit(event)"><div class="form-group"><label>Register New User</label><input type="text" id="regNameInput" placeholder="Full Name" style="margin-bottom:8px;"><input type="email" id="regEmailInput" placeholder="Email"><input type="tel" id="regPhoneInput" maxlength="10" placeholder="Mobile" style="margin-top:8px;"><input type="password" id="regPassInput" placeholder="Password" style="margin-top:8px;"></div><button type="submit" class="btn-submit">Register</button></form></section>
+    </div>
+  </main>
+  <!-- Checkout and Order Confirmation Modals -->
+  <div id="checkoutModalOverlay" class="modal-overlay"><div class="modal-box"><h3 style="margin-bottom:12px;">Checkout & Delivery Details</h3><p style="margin-bottom:14px; font-size:14px;">Total Payable: <strong id="checkoutTotalVal">₹0</strong> (Cash on Delivery)</p><form onsubmit="submitCheckoutOrder(event)"><div class="form-group"><label>Full Name</label><input id="checkoutName" required placeholder="Enter full name"></div><div class="form-group"><label>Mobile Number (10 digits)</label><input id="checkoutPhone" maxlength="10" placeholder="10-digit number" required></div><div class="form-group"><label>Delivery Address</label><input id="checkoutAddress" required placeholder="Street address, city"></div><div style="display:flex; gap:10px; margin-top:16px;"><button type="submit" class="btn-submit">Place Order</button><button type="button" onclick="closeCheckoutModal()" style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; border-radius:4px; cursor:pointer;">Cancel</button></div></form></div></div>
+  <div id="orderSuccessModalOverlay" class="modal-overlay"><div class="modal-box" style="text-align:center;"><h2 style="color:#16a34a; margin-bottom:8px;">🎉 Order Placed Successfully!</h2><p>Order Reference: <strong id="successOrderId"></strong></p><p style="margin:6px 0 14px;">Total Paid: <strong id="successOrderTotal"></strong></p><p style="color:#64748b; font-size:13px; margin-bottom:16px;">Thank you for shopping with Smart Shopping Hub. We are packing your order!</p><button class="btn-submit" onclick="closeOrderSuccessModal()">Back to Home</button></div></div>
+  <div id="toastNotification" class="toast-msg"></div>
+  <footer class="site-footer"><p>© 2026 Smart Shopping Hub E-Commerce. Clean, friendly and simple single-page web code.</p></footer>
+  <script src="/app.js"></script>
+</body>
+</html>
