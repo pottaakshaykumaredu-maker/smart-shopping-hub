@@ -5,18 +5,14 @@ const PRODUCTS = [
   { id: "3", name: "Shoes", price: 1599, oldPrice: 3499, icon: "👟" },
   { id: "4", name: "Shirt", price: 899, oldPrice: 1999, icon: "👔" }
 ];
-
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
 const get = id => document.getElementById(id);
 const money = val => "₹" + val;
-
 function saveAndRender() {
   localStorage.setItem("cart", JSON.stringify(cart));
   if (get("cartBadge")) get("cartBadge").innerText = cart.reduce((s, i) => s + i.qty, 0);
   renderCart();
 }
-
 function renderCatalogue() {
   if (!get("catalogueGrid")) return;
   get("catalogueGrid").innerHTML = PRODUCTS.map(p => `
@@ -31,7 +27,6 @@ function renderCatalogue() {
     </div>
   `).join("");
 }
-
 window.addToCart = (id) => {
   const product = PRODUCTS.find(p => p.id === id);
   const item = cart.find(i => i.id === id);
@@ -39,7 +34,6 @@ window.addToCart = (id) => {
   else cart.push({ ...product, qty: 1 });
   saveAndRender();
 };
-
 window.updateQty = (id, change) => {
   const item = cart.find(i => i.id === id);
   if (item) {
@@ -48,12 +42,10 @@ window.updateQty = (id, change) => {
   }
   saveAndRender();
 };
-
 window.removeFromCart = (id) => {
   cart = cart.filter(i => i.id !== id);
   saveAndRender();
 };
-
 function renderCart() {
   if (!get("cartItemsList")) return;
   let total = 0;
@@ -73,7 +65,6 @@ function renderCart() {
   }).join("");
   if (get("cartSummaryFinal")) get("cartSummaryFinal").innerText = money(total);
 }
-
 document.addEventListener("DOMContentLoaded", () => {
   renderCatalogue();
   saveAndRender();
