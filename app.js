@@ -1,83 +1,52 @@
-const PRODUCTS = [
-  { id: "1", name: "Smartphone", price: 18999, oldPrice: 24999, image: "images/smartphone.png" },
-  { id: "2", name: "Earbuds", price: 2499, oldPrice: 4999, image: "images/earbuds.jpg" },
-  { id: "3", name: "Shoes", price: 1599, oldPrice: 3499, image: "images/running-shoes.jpg" },
-  { id: "4", name: "Shirt", price: 899, oldPrice: 1999, image: "images/cotton-shirt.jpg" }
+const products = [
+  { id: 1, name: "Smartphone", price: 18999, image: "images/smartphone.png" },
+  { id: 2, name: "Earbuds", price: 2499, image: "images/earbuds.jpg" },
+  { id: 3, name: "Shoes", price: 1599, image: "images/running-shoes.jpg" },
+  { id: 4, name: "Shirt", price: 899, image: "images/cotton-shirt.jpg" }
 ];
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-const get = id => document.getElementById(id);
-const money = price => "₹" + price;
-function saveAndRender() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  if (get("cartBadge"))
-    get("cartBadge").innerText = cart.reduce((s, i) => s + i.qty, 0);
-  renderCart();
-}
-function renderCatalogue() {
-  if (!get("catalogueGrid")) return;
-  get("catalogueGrid").innerHTML = PRODUCTS.map(p => `
+let cart = [];
+function showProducts() {
+  document.getElementById("catalogueGrid").innerHTML = products.map(p => `
     <div class="product-card">
-      <img src="${p.image}" alt="${p.name}" class="card-icon"
-           onerror="this.alt='Image not found: '+this.src">
+      <img src="${p.image}" class="card-icon">
       <h3>${p.name}</h3>
-      <div>
-        <span class="price-current">${money(p.price)}</span>
-        <span class="price-old">${money(p.oldPrice)}</span>
-      </div>
-      <button class="btn-add-cart" onclick="addToCart('${p.id}')">
-        Add to Cart
-      </button>
+      <p>₹${p.price}</p>
+      <button onclick="addCart(${p.id})">Add to Cart</button>
     </div>
   `).join("");
 }
-window.addToCart = id => {
-  const product = PRODUCTS.find(p => p.id === id);
-  const item = cart.find(i => i.id === id);
-
+function addCart(id) {
+  let item = cart.find(p => p.id === id);
   if (item) item.qty++;
-  else cart.push({ ...product, qty: 1 });
-
-  saveAndRender();
-};
-window.updateQty = (id, change) => {
-  const item = cart.find(i => i.id === id);
-
-  if (!item) return;
-  item.qty += change;
-
-  if (item.qty <= 0)
-    cart = cart.filter(i => i.id !== id);
-
-  saveAndRender();
-};
-window.removeFromCart = id => {
-  cart = cart.filter(i => i.id !== id);
-  saveAndRender();
-};
-function renderCart() {
-  if (!get("cartItemsList")) return;
-
+  else cart.push({ ...products.find(p => p.id === id), qty: 1 });
+  showCart();
+}
+function showCart() {
   let total = 0;
-  get("cartItemsList").innerHTML = cart.map(i => {
-    total += i.price * i.qty;
+  document.getElementById("cartItemsList").innerHTML = cart.map(p => {
+    total += p.price * p.qty;
     return `
       <div class="cart-item-row">
-        <img src="${i.image}" alt="${i.name}" class="cart-image">
-        <span>${i.name} (x${i.qty})</span>
-        <span>${money(i.price * i.qty)}</span>
-        <div>
-          <button onclick="updateQty('${i.id}', -1)">-</button>
-          <button onclick="updateQty('${i.id}', 1)">+</button>
-          <button class="btn-remove"
-            onclick="removeFromCart('${i.id}')">Remove</button>
-        </div>
+        <img src="${p.image}" class="cart-image">
+        ${p.name} - ₹${p.price * p.qty}
+        <button onclick="changeQty(${p.id}, -1)">-</button>
+        ${p.qty}
+        <button onclick="changeQty(${p.id}, 1)">+</button>
+        <button onclick="removeCart(${p.id})">Remove</button>
       </div>
     `;
   }).join("");
-  if (get("cartSummaryFinal"))
-    get("cartSummaryFinal").innerText = money(total);
+  document.getElementById("cartSummaryFinal").innerText = "₹" + total;
 }
-document.addEventListener("DOMContentLoaded", () => {
-  renderCatalogue();
-  saveAndRender();
-});
+function changeQty(id, value) {
+  let item = cart.find(p => p.id === id);
+  item.qty += value;
+  if (item.qty <= 0) removeCart(id);
+  else showCart();
+}
+function removeCart(id) {
+  cart = cart.filter(p => p.id !== id);
+  showCart();
+}
+showProducts();
+showCart();
